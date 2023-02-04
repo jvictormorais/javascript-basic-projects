@@ -71,4 +71,76 @@ const menu = [
     img: "./images/item-9.jpeg",
     desc: `skateboard fam synth authentic semiotics. Live-edge lyft af, edison bulb yuccie crucifix microdosing.`,
   },
+  {
+    id: 10,
+    title: "steak dinner",
+    category: "dinner",
+    price: 39.99,
+    img: "./images/item-10.jpeg",
+    desc: `skateboard fam synth authentic semiotics. Live-edge lyft af, edison bulb yuccie crucifix microdosing.`,
+  },
 ];
+
+const sectionCenter = document.querySelector('.section-center');
+const container = document.querySelector('.btn-container')
+
+// load items
+window.addEventListener('DOMContentLoaded',function(){
+  displayMenuItens(menu);
+  displayMenuButtons();
+  
+})
+
+function displayMenuItens(menuItens){
+  let displayMenu = menuItens.map(function(item){
+    // console.log(item);
+
+    return `<article class="menu-item">
+    <img src="${item.img}" class="photo" alt="${item.title}">
+    <div class="item-info">
+      <header>
+        <h4>${item.title}</h4>
+        <h4 class="price">${item.price}</h4>
+      </header>
+      <p class="item-text">${item.desc}</p>
+      </div>
+  </article>`;
+  })
+  displayMenu = displayMenu.join('');
+  sectionCenter.innerHTML = displayMenu;
+}
+
+function displayMenuButtons(){
+  const categories = menu.reduce(function(values, item){
+    if(!values.includes(item.category)){
+      values.push(item.category);
+    }
+    return values
+  },['all']);
+  const categoryBtns = categories.map(function(category){
+    return `<button class="filter-btn" type="button" data-id=${category}>${category}</button>`
+  }).join("");
+  container.innerHTML = categoryBtns;
+  const filterBtns = document.querySelectorAll('.filter-btn')
+  //filter items
+
+  filterBtns.forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      const category = e.currentTarget.dataset.id;
+      const menuCategory = menu.filter(function(menuItem){
+        // console.log(menuItem.category);
+        if(menuItem.category === category){
+          return menuItem;
+        }
+      })
+      // console.log(menuCategory);
+      if(category === "all"){
+        displayMenuItens(menu)
+      }
+      else{
+        displayMenuItens(menuCategory);
+      }
+    });
+  });
+
+}
